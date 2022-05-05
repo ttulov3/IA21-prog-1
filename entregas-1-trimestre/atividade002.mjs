@@ -1,26 +1,40 @@
-const readline = require('readline')
-const { stdin: input, stdout: output } = require('process')
+
+import * as readline from 'readline'
+import { stdin as input, stdout as output } from 'process'
 const rl = readline.createInterface({ input, output })
- 
-async function main() {
-  const question = question => new Promise((resolve, reject) => rl.question(question, answer => resolve(answer)))
- 
-  var numero = "" 
-  var soma = 0
-  var cont = 0
-  
-  while( numero.toLowerCase() != 'fim') {
+const question = q => new Promise((rs, rj) => rl.question(q, a => rs(a)))
 
-    numero = await question ("Digite os valores para obter o calculo digite 'fim':")
-     if(numero.toLowerCase() != 'fim'){
-       soma += parseInt(numero)
-       cont += 1
-     }
-  }
+let soma = 0
+let count = 0
+let media
 
-  media = soma / cont
+while (true) {
+    let strNota = await question('Insira o valor ' + (count + 1) + ' ou (N) para realizar as médias: ')
+    
+    if (strNota.toUpperCase() == 'N') {
+        break
+    }
+    
+    let nota = parseFloat(strNota)
 
-  console.log ("A media é:", media)
+    if (isNaN(nota)) {
+        console.log("Por favor digite um numero valido ou N")
+        continue
+    }
+
+    if (nota <= 10 && nota > 0) {
+        soma = soma + nota
+        count++
+    } else {
+        console.log("Voce inseriu um valor maior que 10 ou menor que 0. Insira valores dentro do padrão.")
+    }
 }
- 
-main()
+
+if( count == 0){
+    console.log("Voce saiu do programa :)")
+    process.exit()
+}
+
+media = soma / count
+console.log('A média dos valores é: ', media)
+process.exit()
